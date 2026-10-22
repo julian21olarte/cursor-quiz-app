@@ -1,0 +1,62 @@
+{
+  "id": "cursor-basics-01",
+  "title": "Introducción a Cursor",
+  "description": "Preguntas cortas para practicar el flujo de trabajo con el editor.",
+  "questions": [
+    {
+      "id": "q1",
+      "text": "¿Qué atajo abre el chat del agente en Cursor (macOS)?",
+      "options": [
+        { "id": "a", "text": "Cmd + L" },
+        { "id": "b", "text": "Cmd + K" },
+        { "id": "c", "text": "Cmd + I" },
+        { "id": "d", "text": "Cmd + Shift + P" }
+      ],
+      "correctOptionId": "a"
+    },
+    {
+      "id": "q2",
+      "text": "¿Dónde puedes definir reglas persistentes para el agente?",
+      "options": [
+        { "id": "a", "text": "Solo en comentarios del código" },
+        { "id": "b", "text": "Cursor Settings → Rules" },
+        { "id": "c", "text": "En package.json" },
+        { "id": "d", "text": "En node_modules" }
+      ],
+      "correctOptionId": "b"
+    },
+    {
+      "id": "q3",
+      "text": "Para pedir cambios en línea sobre el código seleccionado usas…",
+      "options": [
+        { "id": "a", "text": "Inline Edit (Cmd + K)" },
+        { "id": "b", "text": "Git blame" },
+        { "id": "c", "text": "Format document" },
+        { "id": "d", "text": "Terminal integrada" }
+      ],
+      "correctOptionId": "a"
+    },
+    {
+      "id": "q4",
+      "text": "¿Qué archivo suele ignorarse para no subir dependencias?",
+      "options": [
+        { "id": "a", "text": "README.md" },
+        { "id": "b", "text": "node_modules/" },
+        { "id": "c", "text": "src/" },
+        { "id": "d", "text": "package.json" }
+      ],
+      "correctOptionId": "b"
+    },
+    {
+      "id": "q5",
+      "text": "En este proyecto, ¿desde qué puerto corre la API en local?",
+      "options": [
+        { "id": "a", "text": "3000" },
+        { "id": "b", "text": "4000" },
+        { "id": "c", "text": "5173" },
+        { "id": "d", "text": "8080" }
+      ],
+      "correctOptionId": "b"
+    }
+  ]
+}

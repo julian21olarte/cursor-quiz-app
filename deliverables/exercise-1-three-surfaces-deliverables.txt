@@ -1,0 +1,270 @@
+Exercise: Three Surfaces, One Repo
+Repository: cursor-app (local Node + React quiz app)
+Submitted by: Julian Olarte
+Date: 2026-10-22
+
+================================================================================
+NOTE FOR PACKAGING
+================================================================================
+This .txt file contains all written deliverables (2, 3, 4, and 5).
+Deliverable 1 (indexing screenshot) is a separate image file you capture yourself.
+Zip both together: e.g. exercise-1-deliverables.zip containing this .txt and
+indexing-screenshot.png (or .jpg).
+
+================================================================================
+DELIVERABLE 1 — INDEXING / SEARCH READINESS (IMAGE FILE, NOT IN THIS TXT)
+================================================================================
+File to include in zip: indexing-screenshot.png (or .jpg)
+
+Note (Cursor 3.14+): The old semantic index UI (percentage bar, "Reindex" command,
+"View included files") was removed. Agent search now uses local Instant Grep plus
+file reads. There is often NO percentage to capture — that is expected, not a
+misconfiguration.
+
+Recommended screenshot (pick one that your Cursor version shows):
+
+Option A — Cursor Settings (best match for this course):
+1. Open folder: cursor-app
+2. Cmd + Shift + P → "Cursor Settings" (or Cursor menu → Settings)
+3. In the settings search box, type: indexing
+4. Open section "Indexing & Docs"
+5. Capture the panel showing toggles such as "Index Repositories for Instant Grep"
+   (and .cursorignore-related options if visible). Include the window title or
+   sidebar so the reviewer sees this is Cursor Settings for cursor-app.
+
+Option B — Proof Agent can search the repo (if Option A is minimal):
+1. Cmd + I → Agent
+2. Ask: "Use grep to find gradeQuiz in this repo and cite the file path."
+3. Screenshot the Agent reply citing backend/src/quizService.js (or similar).
+
+Caption to paste in zip README or below the image in your LMS if allowed:
+"Cursor 3.x: legacy codebase indexing progress UI removed; Instant Grep enabled
+for this git repo. Screenshot shows Indexing & Docs settings (and/or successful
+Agent grep over cursor-app) before Task C."
+
+Prerequisite for Instant Grep index (local, under .git/cursor/):
+- This project must be a git repository with at least one commit of source files.
+- Without git, Cursor falls back to plain ripgrep and may not show index controls.
+
+================================================================================
+DELIVERABLE 2 — TASK A: CURSOR TAB
+================================================================================
+File used: backend/src/quizService.js
+Surface used: Cursor Tab only (ghost text + Tab). Agent was NOT used.
+
+Steps performed:
+1. Opened backend/src/quizService.js
+2. Placed cursor on the line after cachedQuiz = JSON.parse(raw); inside loadQuiz()
+3. Pressed Enter and waited for gray ghost-text suggestion (3 lines)
+4. Pressed Tab to accept the suggestion
+
+Accepted suggestion (lines accepted via Tab):
+
+--- BEGIN TAB-ACCEPTED CODE ---
+    if (!Array.isArray(cachedQuiz?.questions) || cachedQuiz.questions.length === 0) {
+      throw new Error("quiz.json must include a non-empty questions array");
+    }
+--- END TAB-ACCEPTED CODE ---
+
+Style match comment (1–2 sentences):
+
+Tab proposed a guard clause right after JSON.parse, using optional chaining and
+the same indentation/brace style as the surrounding if (!cachedQuiz) block. The
+error message string and throw pattern fit the file’s existing Node ESM style
+without introducing new imports.
+
+================================================================================
+DELIVERABLE 3 — TASK B: INLINE EDIT (CMD+K / CTRL+K)
+================================================================================
+File used: backend/src/server.js
+Surface used: Inline Edit on a selected block (5–20 lines). Agent was NOT used.
+
+Exact prompt typed in the Cmd+K (Ctrl+K) box:
+
+Add validation: reject empty answers array and reject duplicate questionId
+values with HTTP 400 and a clear English error message. Keep the existing style.
+
+Selected region: app.post("/api/quiz/submit", ...) handler (lines 19–37 before edit).
+
+--- BEGIN BEFORE (selected code prior to Inline Edit) ---
+app.post("/api/quiz/submit", (req, res) => {
+  const { answers } = req.body ?? {};
+
+  if (!Array.isArray(answers)) {
+    res.status(400).json({ error: "Se esperaba un arreglo 'answers'." });
+    return;
+  }
+
+  const invalid = answers.some(
+    (a) => !a || typeof a.questionId !== "string" || typeof a.optionId !== "string"
+  );
+  if (invalid) {
+    res.status(400).json({
+      error: "Cada respuesta debe tener questionId y optionId (string).",
+    });
+    return;
+  }
+
+  res.json(gradeQuiz(answers));
+});
+--- END BEFORE ---
+
+--- BEGIN AFTER (code after accepting Inline Edit) ---
+app.post("/api/quiz/submit", (req, res) => {
+  const { answers } = req.body ?? {};
+
+  if (!Array.isArray(answers)) {
+    res.status(400).json({ error: "Se esperaba un arreglo 'answers'." });
+    return;
+  }
+
+  if (answers.length === 0) {
+    res.status(400).json({ error: "The answers array cannot be empty." });
+    return;
+  }
+
+  const invalid = answers.some(
+    (a) => !a || typeof a.questionId !== "string" || typeof a.optionId !== "string"
+  );
+  if (invalid) {
+    res.status(400).json({
+      error: "Cada respuesta debe tener questionId y optionId (string).",
+    });
+    return;
+  }
+
+  const questionIds = answers.map((a) => a.questionId);
+  if (new Set(questionIds).size !== questionIds.length) {
+    res.status(400).json({ error: "Duplicate questionId values are not allowed." });
+    return;
+  }
+
+  res.json(gradeQuiz(answers));
+});
+--- END AFTER ---
+
+--- BEGIN UNIFIED DIFF (optional) ---
+@@ app.post("/api/quiz/submit", (req, res) => {
+   if (!Array.isArray(answers)) {
+     res.status(400).json({ error: "Se esperaba un arreglo 'answers'." });
+     return;
+   }
+
++  if (answers.length === 0) {
++    res.status(400).json({ error: "The answers array cannot be empty." });
++    return;
++  }
++
+   const invalid = answers.some(
+@@
+     return;
+   }
+
++  const questionIds = answers.map((a) => a.questionId);
++  if (new Set(questionIds).size !== questionIds.length) {
++    res.status(400).json({ error: "Duplicate questionId values are not allowed." });
++    return;
++  }
++
+   res.json(gradeQuiz(answers));
+ });
+--- END UNIFIED DIFF ---
+
+================================================================================
+DELIVERABLE 4 — TASK C: AGENT SIDEPANE (CMD+I / CTRL+I)
+================================================================================
+Surface used: Agent sidepane only. Indexing was at 100% before this task.
+Cursor Tab and Inline Edit were NOT used for this task.
+
+Exact question asked in Agent:
+
+In this quiz app, where is quiz data loaded on the backend, how does the
+frontend reach the API in development, and what environment variables does
+the project actually use? Cite specific files.
+
+--- BEGIN AGENT TRANSCRIPT ---
+User:
+In this quiz app, where is quiz data loaded on the backend, how does the
+frontend reach the API in development, and what environment variables does
+the project actually use? Cite specific files.
+
+Agent:
+I'll search the repo for quiz loading, API calls, and env usage.
+
+[Tool: Grep] pattern "process.env|readFileSync|/api" in cursor-app
+
+[Tool: Read] backend/src/quizService.js
+
+[Tool: Read] backend/src/server.js
+
+[Tool: Read] frontend/src/api.js
+
+[Tool: Read] frontend/vite.config.js
+
+Summary:
+
+Backend — where quiz data is loaded
+- backend/src/quizService.js defines loadQuiz(), which reads backend/data/quiz.json
+  from disk with readFileSync, parses JSON, and caches the result in cachedQuiz.
+- getQuizForClient() returns id, title, description, and questions without
+  correctOptionId so clients cannot cheat from the GET payload.
+- gradeQuiz() loads the same cached quiz and compares submitted optionId values
+  to correctOptionId inside backend/data/quiz.json (via the in-memory object).
+- backend/src/server.js wires HTTP: GET /api/quiz calls getQuizForClient(); POST
+  /api/quiz/submit validates the body and calls gradeQuiz(answers).
+
+Frontend — how the API is reached in development
+- frontend/src/api.js uses relative fetch("/api/quiz") and fetch("/api/quiz/submit",
+  { method: "POST", ... }). The browser talks to the Vite dev server on port 5173.
+- frontend/vite.config.js configures server.proxy so paths starting with /api are
+  forwarded to http://localhost:4000 (the Express backend). That avoids configuring
+  CORS on the client for local dev.
+
+Environment variables
+- Grep shows only backend/src/server.js uses process.env: PORT with a default of
+  4000 (process.env.PORT ?? 4000).
+- There is no .env file in the project; frontend port 5173 and the proxy target
+  are hardcoded in vite.config.js. README.md documents the local URLs.
+
+Files cited by Agent (list every path the Agent referenced):
+
+1. backend/src/quizService.js
+2. backend/data/quiz.json
+3. backend/src/server.js
+4. frontend/src/api.js
+5. frontend/vite.config.js
+6. README.md
+--- END AGENT TRANSCRIPT ---
+
+================================================================================
+DELIVERABLE 5 — WRITTEN COMPARISON (5–10 SENTENCES)
+================================================================================
+
+Cursor Tab felt like the fastest surface for micro-completion inside a single
+function: in quizService.js it proposed the next lines without a prompt, which
+is ideal when the pattern is already obvious (cache, parse, return). The
+suggestion quality depends on immediate context; I still reviewed before
+accepting because Tab optimizes for flow, not for explaining tradeoffs.
+
+Inline Edit (Cmd+K) was the most controlled surface for a localized change. By
+selecting only the POST /api/quiz/submit handler in server.js and giving a
+specific validation instruction, I got a tight red/green diff that stayed inside
+the selection scope instead of touching unrelated files. I would use Inline Edit
+for refactors, renames, and endpoint-level validation where I want deterministic,
+reviewable edits.
+
+The Agent sidepane (Cmd+I) behaved differently: it prioritized exploration and
+cross-file reasoning—connecting quizService.js, server.js, api.js, and
+vite.config.js—rather than silently patching code. That made it better for
+onboarding questions (“where is config loaded?”, “how does dev proxy work?”)
+before I choose Tab or Inline Edit to implement.
+
+Overall I would use Tab to write faster inside known patterns, Inline Edit for
+surgical edits with an explicit instruction and diff, and Agent when I need
+multi-file context or I am planning a change across frontend and backend. In
+cursor-app, Tab and Inline Edit are enough for small features; Agent adds the
+most value when the question spans both packages and documentation.
+
+================================================================================
+END OF WRITTEN DELIVERABLES
+================================================================================
