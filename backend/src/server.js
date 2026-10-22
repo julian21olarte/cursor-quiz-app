@@ -1,7 +1,7 @@
 import cors from "cors";
 import express from "express";
 import { sendApiError } from "./apiErrors.js";
-import { getQuizForClient, gradeQuiz } from "./quizService.js";
+import { getQuizForClient, getQuizMeta, gradeQuiz } from "./quizService.js";
 import { validateSubmitAnswers } from "./quizSubmitValidation.js";
 
 const app = express();
@@ -14,8 +14,25 @@ app.get("/api/health", (_req, res) => {
   res.json({ ok: true, service: "cursor-quiz-api" });
 });
 
+app.get("/api/quiz/meta", (_req, res) => {
+  try {
+    res.json(getQuizMeta());
+  } catch {
+    sendApiError(
+      res,
+      500,
+      "QUIZ_LOAD_FAILED",
+      "Quiz metadata could not be loaded."
+    );
+  }
+});
+
 app.get("/api/quiz", (_req, res) => {
-  res.json(getQuizForClient());
+  try {
+    res.json(getQuizForClient());
+  } catch {
+    sendApiError(res, 500, "QUIZ_LOAD_FAILED", "Quiz could not be loaded.");
+  }
 });
 
 app.post("/api/quiz/submit", (req, res) => {

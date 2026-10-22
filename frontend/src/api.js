@@ -8,6 +8,15 @@ function readErrorMessage(body, fallback) {
   return fallback;
 }
 
+export async function fetchQuizMeta() {
+  const res = await fetch("/api/quiz/meta");
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(readErrorMessage(body, "Could not load quiz metadata."));
+  }
+  return res.json();
+}
+
 export async function fetchQuiz() {
   const res = await fetch("/api/quiz");
   if (!res.ok) {

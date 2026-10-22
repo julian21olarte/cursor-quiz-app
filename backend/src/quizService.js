@@ -18,6 +18,15 @@ function loadQuiz() {
   return cachedQuiz;
 }
 
+export function getQuizMeta() {
+  const quiz = loadQuiz();
+  return {
+    id: quiz.id,
+    title: quiz.title,
+    questionCount: quiz.questions.length,
+  };
+}
+
 /** Respuesta pública: sin las claves correctas (ideal para el curso). */
 export function getQuizForClient() {
   const quiz = loadQuiz();

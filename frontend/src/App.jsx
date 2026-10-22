@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { fetchQuiz, submitQuiz } from "./api.js";
+import { fetchQuiz, fetchQuizMeta, submitQuiz } from "./api.js";
 import {
   getBestScore,
   saveBestScoreIfHigher,
@@ -11,6 +11,7 @@ function App() {
   const [selections, setSelections] = useState({});
   const [result, setResult] = useState(null);
   const [bestScore, setBestScore] = useState(null);
+  const [quizMeta, setQuizMeta] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
@@ -19,9 +20,10 @@ function App() {
     let cancelled = false;
     (async () => {
       try {
-        const data = await fetchQuiz();
+        const [data, meta] = await Promise.all([fetchQuiz(), fetchQuizMeta()]);
         if (!cancelled) {
           setQuiz(data);
+          setQuizMeta(meta);
           setBestScore(getBestScore(data.id));
         }
       } catch (e) {
@@ -109,6 +111,11 @@ function App() {
         <span className="badge">Curso Cursor</span>
         <h1>{quiz.title}</h1>
         <p>{quiz.description}</p>
+        {quizMeta && (
+          <p className="quiz-meta">
+            {quizMeta.id} · {quizMeta.questionCount} questions
+          </p>
+        )}
         {bestScore != null && (
           <p className="best-score" data-testid="best-score">
             Personal best: <strong>{bestScore}</strong> / {quiz.questions.length}
