@@ -1,11 +1,16 @@
 import { useCallback, useEffect, useState } from "react";
 import { fetchQuiz, submitQuiz } from "./api.js";
+import {
+  getBestScore,
+  saveBestScoreIfHigher,
+} from "./utils/bestScoreStorage.js";
 import "./App.css";
 
 function App() {
   const [quiz, setQuiz] = useState(null);
   const [selections, setSelections] = useState({});
   const [result, setResult] = useState(null);
+  const [bestScore, setBestScore] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
@@ -15,7 +20,10 @@ function App() {
     (async () => {
       try {
         const data = await fetchQuiz();
-        if (!cancelled) setQuiz(data);
+        if (!cancelled) {
+          setQuiz(data);
+          setBestScore(getBestScore(data.id));
+        }
       } catch (e) {
         if (!cancelled) setError(e.message);
       } finally {
@@ -52,6 +60,8 @@ function App() {
     try {
       const graded = await submitQuiz(answers);
       setResult(graded);
+      const updatedBest = saveBestScoreIfHigher(quiz.id, graded.score);
+      setBestScore(updatedBest);
     } catch (e) {
       setError(e.message);
     } finally {
@@ -64,6 +74,9 @@ function App() {
     setResult(null);
     setError(null);
   };
+
+  const allAnswered =
+    quiz?.questions.every((q) => Boolean(selections[q.id])) ?? false;
 
   if (loading) {
     return (
@@ -96,6 +109,11 @@ function App() {
         <span className="badge">Curso Cursor</span>
         <h1>{quiz.title}</h1>
         <p>{quiz.description}</p>
+        {bestScore != null && (
+          <p className="best-score" data-testid="best-score">
+            Personal best: <strong>{bestScore}</strong> / {quiz.questions.length}
+          </p>
+        )}
       </header>
 
       {error && (
@@ -152,7 +170,7 @@ function App() {
 
         <footer className="actions">
           {!result ? (
-            <button type="submit" disabled={submitting}>
+            <button type="submit" disabled={submitting || !allAnswered}>
               {submitting ? "Enviando…" : "Enviar respuestas"}
             </button>
           ) : (
@@ -174,7 +192,7 @@ function App() {
         <ul>
           <li>Añadir una pregunta nueva en <code>backend/data/quiz.json</code></li>
           <li>Mostrar un temporizador en el frontend</li>
-          <li>Guardar el mejor puntaje en <code>localStorage</code></li>
+          <li>Mostrar historial de intentos (backend)</li>
           <li>Crear un endpoint <code>GET /api/quiz/random</code></li>
         </ul>
       </aside>

@@ -33,6 +33,12 @@
   color: var(--muted);
 }
 
+.best-score {
+  margin-top: 0.75rem !important;
+  font-size: 0.95rem;
+  color: var(--accent);
+}
+
 .muted {
   color: var(--muted);
   text-align: center;
