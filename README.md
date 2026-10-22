@@ -35,7 +35,7 @@ El proxy de Vite reenvía `/api/*` al backend, así el frontend no necesita CORS
 
 | Método | Ruta | Descripción |
 |--------|------|-------------|
-| GET | `/api/health` | Estado del servicio |
+| GET | `/api/health` | `{ ok, service, version, uptimeSeconds }` |
 | GET | `/api/quiz` | Preguntas (sin respuestas correctas) |
 | GET | `/api/quiz/meta` | `{ id, title, questionCount }` (sin preguntas) |
 | POST | `/api/quiz/submit` | Body: `{ "answers": [{ "questionId", "optionId" }] }` |

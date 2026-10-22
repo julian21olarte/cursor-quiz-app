@@ -2,6 +2,7 @@ import cors from "cors";
 import express from "express";
 import { sendApiError } from "./apiErrors.js";
 import { getQuizForClient, getQuizMeta, gradeQuiz } from "./quizService.js";
+import { getHealthPayload } from "./healthPayload.js";
 import { validateSubmitAnswers } from "./quizSubmitValidation.js";
 
 const app = express();
@@ -11,7 +12,7 @@ app.use(cors({ origin: true }));
 app.use(express.json());
 
 app.get("/api/health", (_req, res) => {
-  res.json({ ok: true, service: "cursor-quiz-api" });
+  res.json(getHealthPayload());
 });
 
 app.get("/api/quiz/meta", (_req, res) => {

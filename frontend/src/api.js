@@ -8,6 +8,15 @@ function readErrorMessage(body, fallback) {
   return fallback;
 }
 
+export async function fetchHealth() {
+  const res = await fetch("/api/health");
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(readErrorMessage(body, "Could not load API health."));
+  }
+  return res.json();
+}
+
 export async function fetchQuizMeta() {
   const res = await fetch("/api/quiz/meta");
   if (!res.ok) {

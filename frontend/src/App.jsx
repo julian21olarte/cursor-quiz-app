@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { fetchQuiz, fetchQuizMeta, submitQuiz } from "./api.js";
+import { fetchHealth, fetchQuiz, fetchQuizMeta, submitQuiz } from "./api.js";
 import {
   getBestScore,
   saveBestScoreIfHigher,
@@ -12,6 +12,7 @@ function App() {
   const [result, setResult] = useState(null);
   const [bestScore, setBestScore] = useState(null);
   const [quizMeta, setQuizMeta] = useState(null);
+  const [apiVersion, setApiVersion] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
@@ -20,10 +21,15 @@ function App() {
     let cancelled = false;
     (async () => {
       try {
-        const [data, meta] = await Promise.all([fetchQuiz(), fetchQuizMeta()]);
+        const [data, meta, health] = await Promise.all([
+          fetchQuiz(),
+          fetchQuizMeta(),
+          fetchHealth(),
+        ]);
         if (!cancelled) {
           setQuiz(data);
           setQuizMeta(meta);
+          setApiVersion(health.version ?? null);
           setBestScore(getBestScore(data.id));
         }
       } catch (e) {
@@ -114,6 +120,7 @@ function App() {
         {quizMeta && (
           <p className="quiz-meta">
             {quizMeta.id} · {quizMeta.questionCount} questions
+            {apiVersion ? ` · API v${apiVersion}` : ""}
           </p>
         )}
         {bestScore != null && (
