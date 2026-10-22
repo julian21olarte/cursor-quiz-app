@@ -1,6 +1,8 @@
 import cors from "cors";
 import express from "express";
+import { sendApiError } from "./apiErrors.js";
 import { getQuizForClient, gradeQuiz } from "./quizService.js";
+import { validateSubmitAnswers } from "./quizSubmitValidation.js";
 
 const app = express();
 const PORT = process.env.PORT ?? 4000;
@@ -18,34 +20,26 @@ app.get("/api/quiz", (_req, res) => {
 
 app.post("/api/quiz/submit", (req, res) => {
   const { answers } = req.body ?? {};
+  const validation = validateSubmitAnswers(answers);
 
-  if (!Array.isArray(answers)) {
-    res.status(400).json({ error: "Se esperaba un arreglo 'answers'." });
-    return;
-  }
-
-  if (answers.length === 0) {
-    res.status(400).json({ error: "The answers array cannot be empty." });
-    return;
-  }
-
-  const invalid = answers.some(
-    (a) => !a || typeof a.questionId !== "string" || typeof a.optionId !== "string"
-  );
-  if (invalid) {
-    res.status(400).json({
-      error: "Cada respuesta debe tener questionId y optionId (string).",
-    });
-    return;
-  }
-
-  const questionIds = answers.map((a) => a.questionId);
-  if (new Set(questionIds).size !== questionIds.length) {
-    res.status(400).json({ error: "Duplicate questionId values are not allowed." });
+  if (!validation.ok) {
+    sendApiError(res, 400, validation.code, validation.message);
     return;
   }
 
   res.json(gradeQuiz(answers));
+});
+
+app.use((_req, res) => {
+  sendApiError(res, 404, "NOT_FOUND", "Route not found.");
+});
+
+app.use((err, req, res, next) => {
+  if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
+    sendApiError(res, 400, "INVALID_JSON", "Request body must be valid JSON.");
+    return;
+  }
+  next(err);
 });
 
 app.listen(PORT, () => {
