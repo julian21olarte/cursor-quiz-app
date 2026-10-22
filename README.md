@@ -37,7 +37,16 @@ El proxy de Vite reenvía `/api/*` al backend, así el frontend no necesita CORS
 |--------|------|-------------|
 | GET | `/api/health` | Estado del servicio |
 | GET | `/api/quiz` | Preguntas (sin respuestas correctas) |
+| GET | `/api/quiz/meta` | `{ id, title, questionCount }` (sin preguntas) |
 | POST | `/api/quiz/submit` | Body: `{ "answers": [{ "questionId", "optionId" }] }` |
+
+Errores HTTP usan `{ "error": { "code", "message" } }` (ver `backend/src/apiErrors.js`).
+
+## Tests
+
+```bash
+npm run test:all
+```
 
 ## Ideas de ejercicios para el curso
 
