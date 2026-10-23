@@ -5,7 +5,7 @@ export function pickBestScore(previous, currentScore) {
     return previous ?? null;
   }
   if (previous == null) return currentScore;
-  return Math.max(previous, currentScore);
+  return Math.min(previous, currentScore);
 }
 
 function readAll() {
