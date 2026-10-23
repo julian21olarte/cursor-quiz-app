@@ -4,6 +4,7 @@
 - **Install:** From repo root: `npm run install:all`.
 - **Run dev:** `npm run dev` (both) or `npm run dev:backend` / `npm run dev:frontend`.
 - **Tests:** `npm run test:all` (backend + frontend). Backend only: `npm run test --prefix backend`.
+- **UI scores:** Use `formatPercentage(score, total)` for consistent `score/total (pct%)` copy.
 - **Layout:** `backend/src/` for API; `frontend/src/` for UI; shared quiz data in `backend/data/quiz.json`.
 - **API errors:** Use `sendApiError` / nested `{ error: { code, message } }` (see `.cursor/rules/api-errors.mdc`).
 - **Dependencies:** Do not add npm packages unless the user explicitly asks.

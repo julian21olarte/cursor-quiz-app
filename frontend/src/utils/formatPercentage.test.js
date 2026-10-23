@@ -9,3 +9,7 @@ test("formatPercentage formats score and rounded percent", () => {
 test("formatPercentage handles zero total", () => {
   assert.equal(formatPercentage(0, 0), "0/0 (0%)");
 });
+
+test("formatPercentage rounds percent like backend gradeQuiz", () => {
+  assert.equal(formatPercentage(1, 3), "1/3 (33%)");
+});
