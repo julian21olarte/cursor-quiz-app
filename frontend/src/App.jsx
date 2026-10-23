@@ -192,6 +192,7 @@ function App() {
           ) : (
             <div className="score-panel">
               <p className="score">
+                {/* UI derives % locally so it stays aligned with formatPercentage rounding */}
                 Puntaje:{" "}
                 <strong>{formatPercentage(result.score, result.total)}</strong>
               </p>
