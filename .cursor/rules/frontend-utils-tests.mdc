@@ -1,0 +1,14 @@
+---
+description: New frontend utils must ship with node:test coverage
+globs: frontend/src/utils/**/*.js
+alwaysApply: false
+---
+
+# Frontend utility modules
+
+When creating or editing files under `frontend/src/utils/`:
+
+- Add or update a colocated `*.test.js` file (same basename).
+- Use Node built-in `node:test` and `node:assert/strict` (match `bestScoreStorage.test.js`).
+- Cover at least happy path and one edge case.
+- Do not add Jest/Vitest dependencies for utils-only changes.
