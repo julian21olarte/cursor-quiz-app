@@ -15,3 +15,13 @@ test("pickBestScore ignores invalid current", () => {
   assert.equal(pickBestScore(3, NaN), 3);
   assert.equal(pickBestScore(null, "x"), null);
 });
+
+test("regression: recorded best is not replaced by a lower score", () => {
+  const recordedBest = 8;
+  const worseAttempt = 6;
+  assert.equal(
+    pickBestScore(recordedBest, worseAttempt),
+    recordedBest,
+    "must use max semantics, not min"
+  );
+});
