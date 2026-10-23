@@ -1,3 +1,4 @@
+/** Display helper; rounding must stay aligned with backend gradeQuiz percentage. */
 export function formatPercentage(score, total) {
   if (!total || total <= 0) {
     return `${score}/0 (0%)`;

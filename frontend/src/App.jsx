@@ -4,6 +4,7 @@ import {
   getBestScore,
   saveBestScoreIfHigher,
 } from "./utils/bestScoreStorage.js";
+import { formatPercentage } from "./utils/formatPercentage.js";
 import "./App.css";
 
 function App() {
@@ -125,7 +126,8 @@ function App() {
         )}
         {bestScore != null && (
           <p className="best-score" data-testid="best-score">
-            Personal best: <strong>{bestScore}</strong> / {quiz.questions.length}
+            Personal best:{" "}
+            <strong>{formatPercentage(bestScore, quiz.questions.length)}</strong>
           </p>
         )}
       </header>
@@ -190,8 +192,8 @@ function App() {
           ) : (
             <div className="score-panel">
               <p className="score">
-                Puntaje: <strong>{result.score}</strong> / {result.total} (
-                {result.percentage}%)
+                Puntaje:{" "}
+                <strong>{formatPercentage(result.score, result.total)}</strong>
               </p>
               <button type="button" className="secondary" onClick={onRetry}>
                 Intentar de nuevo

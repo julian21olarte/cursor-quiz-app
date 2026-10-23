@@ -48,6 +48,8 @@ Errores HTTP usan `{ "error": { "code", "message" } }` (ver `backend/src/apiErro
 npm run test:all
 ```
 
+Score labels in the UI use `formatPercentage()` (`frontend/src/utils/formatPercentage.js`) so displayed percentages match backend rounding.
+
 ## Ideas de ejercicios para el curso
 
 1. Agregar una sexta pregunta en `backend/data/quiz.json`.
