@@ -16,12 +16,15 @@ export function pickBestScore(previous, currentScore) {
   return chooseHigherScore(previous, currentScore);
 }
 
+function parseScoreMap(raw) {
+  if (!raw) return {};
+  const parsed = JSON.parse(raw);
+  return typeof parsed === "object" && parsed !== null ? parsed : {};
+}
+
 function readAll() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return {};
-    const parsed = JSON.parse(raw);
-    return typeof parsed === "object" && parsed !== null ? parsed : {};
+    return parseScoreMap(localStorage.getItem(STORAGE_KEY));
   } catch {
     return {};
   }
