@@ -1,11 +1,19 @@
 const STORAGE_KEY = "cursor-quiz-best-scores";
 
+function isValidScore(value) {
+  return typeof value === "number" && !Number.isNaN(value);
+}
+
+function chooseHigherScore(previous, currentScore) {
+  return Math.max(previous, currentScore);
+}
+
 export function pickBestScore(previous, currentScore) {
-  if (typeof currentScore !== "number" || Number.isNaN(currentScore)) {
+  if (!isValidScore(currentScore)) {
     return previous ?? null;
   }
   if (previous == null) return currentScore;
-  return Math.max(previous, currentScore);
+  return chooseHigherScore(previous, currentScore);
 }
 
 function readAll() {
