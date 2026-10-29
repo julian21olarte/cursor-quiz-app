@@ -14,7 +14,7 @@ Files on main (human-authored, not agent task scope):
   - scripts/verify-gate.sh
   - docs/GITHUB-BRANCH-PROTECTION.md
 
-Baseline main SHA: BASELINE_MAIN_SHA
+Baseline main SHA: 8b42dae
 
 Agent task (low risk)
 ---------------------
