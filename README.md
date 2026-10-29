@@ -14,6 +14,16 @@ cursor-app/
 └── package.json      # Scripts para levantar todo junto
 ```
 
+## Quick reference
+
+| Action | Command / URL |
+|--------|----------------|
+| Install dependencies | `npm run install:all` |
+| Run API + frontend | `npm run dev` |
+| Verification gate | `./scripts/verify-gate.sh` or `npm run test:all` |
+| API health | http://localhost:4000/api/health |
+| Quiz UI | http://localhost:5173 |
+
 ## Requisitos
 
 - Node.js 18+ (recomendado 20+)
