@@ -5,3 +5,4 @@ dist/
 *.log
 .DS_Store
 .cursor/mcp.json
+exercise-7-unfamiliar/
