@@ -1,0 +1,23 @@
+Agent tool: Shell — npm run test --prefix backend
+Working directory: cursor-app
+
+> cursor-quiz-backend@1.0.0 test
+> node --test src/**/*.test.js
+
+✔ apiErrorBody nests code and message
+✔ apiErrorBody includes details when provided
+✔ rejects non-array answers
+✔ rejects empty array
+✔ rejects invalid answer shape
+✔ rejects duplicate question ids
+✔ accepts valid payload
+✔ getQuizMeta exposes id and questionCount from quiz.json
+✔ getHealthPayload includes service, version, uptimeSeconds
+
+ℹ tests 9
+ℹ pass 9
+ℹ fail 0
+
+Optional curl (manual sanity):
+$ curl -s http://localhost:4000/api/health
+{"ok":true,"service":"cursor-quiz-api","version":"1.0.0","uptimeSeconds":12}

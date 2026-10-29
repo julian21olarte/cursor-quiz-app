@@ -1,0 +1,373 @@
+diff --git a/backend/package.json b/backend/package.json
+index 2c0b030..21e6b74 100644
+--- a/backend/package.json
++++ b/backend/package.json
+@@ -5,7 +5,8 @@
+   "type": "module",
+   "scripts": {
+     "dev": "node --watch src/server.js",
+-    "start": "node src/server.js"
++    "start": "node src/server.js",
++    "test": "node --test src/**/*.test.js"
+   },
+   "dependencies": {
+     "cors": "^2.8.5",
+diff --git a/backend/src/apiErrors.js b/backend/src/apiErrors.js
+new file mode 100644
+index 0000000..25993ba
+--- /dev/null
++++ b/backend/src/apiErrors.js
+@@ -0,0 +1,11 @@
++export function apiErrorBody(code, message, details = undefined) {
++  const body = { error: { code, message } };
++  if (details !== undefined) {
++    body.error.details = details;
++  }
++  return body;
++}
++
++export function sendApiError(res, status, code, message, details) {
++  res.status(status).json(apiErrorBody(code, message, details));
++}
+diff --git a/backend/src/apiErrors.test.js b/backend/src/apiErrors.test.js
+new file mode 100644
+index 0000000..caff42a
+--- /dev/null
++++ b/backend/src/apiErrors.test.js
+@@ -0,0 +1,15 @@
++import test from "node:test";
++import assert from "node:assert/strict";
++import { apiErrorBody } from "./apiErrors.js";
++
++test("apiErrorBody nests code and message", () => {
++  const body = apiErrorBody("TEST_CODE", "Something failed");
++  assert.deepEqual(body, {
++    error: { code: "TEST_CODE", message: "Something failed" },
++  });
++});
++
++test("apiErrorBody includes details when provided", () => {
++  const body = apiErrorBody("TEST_CODE", "Fail", { field: "answers" });
++  assert.equal(body.error.details.field, "answers");
++});
+diff --git a/backend/src/quizSubmitValidation.js b/backend/src/quizSubmitValidation.js
+new file mode 100644
+index 0000000..c0463ba
+--- /dev/null
++++ b/backend/src/quizSubmitValidation.js
+@@ -0,0 +1,46 @@
++export const SubmitErrorCodes = {
++  ANSWERS_NOT_ARRAY: "ANSWERS_NOT_ARRAY",
++  ANSWERS_EMPTY: "ANSWERS_EMPTY",
++  ANSWER_SHAPE_INVALID: "ANSWER_SHAPE_INVALID",
++  DUPLICATE_QUESTION_ID: "DUPLICATE_QUESTION_ID",
++};
++
++export function validateSubmitAnswers(answers) {
++  if (!Array.isArray(answers)) {
++    return {
++      ok: false,
++      code: SubmitErrorCodes.ANSWERS_NOT_ARRAY,
++      message: "Request body must include an 'answers' array.",
++    };
++  }
++
++  if (answers.length === 0) {
++    return {
++      ok: false,
++      code: SubmitErrorCodes.ANSWERS_EMPTY,
++      message: "The answers array cannot be empty.",
++    };
++  }
++
++  const invalid = answers.some(
++    (a) => !a || typeof a.questionId !== "string" || typeof a.optionId !== "string"
++  );
++  if (invalid) {
++    return {
++      ok: false,
++      code: SubmitErrorCodes.ANSWER_SHAPE_INVALID,
++      message: "Each answer must include questionId and optionId as strings.",
++    };
++  }
++
++  const questionIds = answers.map((a) => a.questionId);
++  if (new Set(questionIds).size !== questionIds.length) {
++    return {
++      ok: false,
++      code: SubmitErrorCodes.DUPLICATE_QUESTION_ID,
++      message: "Duplicate questionId values are not allowed.",
++    };
++  }
++
++  return { ok: true };
++}
+diff --git a/backend/src/quizSubmitValidation.test.js b/backend/src/quizSubmitValidation.test.js
+new file mode 100644
+index 0000000..7098560
+--- /dev/null
++++ b/backend/src/quizSubmitValidation.test.js
+@@ -0,0 +1,41 @@
++import test from "node:test";
++import assert from "node:assert/strict";
++import {
++  validateSubmitAnswers,
++  SubmitErrorCodes,
++} from "./quizSubmitValidation.js";
++
++test("rejects non-array answers", () => {
++  const result = validateSubmitAnswers({});
++  assert.equal(result.ok, false);
++  assert.equal(result.code, SubmitErrorCodes.ANSWERS_NOT_ARRAY);
++});
++
++test("rejects empty array", () => {
++  const result = validateSubmitAnswers([]);
++  assert.equal(result.ok, false);
++  assert.equal(result.code, SubmitErrorCodes.ANSWERS_EMPTY);
++});
++
++test("rejects invalid answer shape", () => {
++  const result = validateSubmitAnswers([{ questionId: "q1" }]);
++  assert.equal(result.ok, false);
++  assert.equal(result.code, SubmitErrorCodes.ANSWER_SHAPE_INVALID);
++});
++
++test("rejects duplicate question ids", () => {
++  const result = validateSubmitAnswers([
++    { questionId: "q1", optionId: "a" },
++    { questionId: "q1", optionId: "b" },
++  ]);
++  assert.equal(result.ok, false);
++  assert.equal(result.code, SubmitErrorCodes.DUPLICATE_QUESTION_ID);
++});
++
++test("accepts valid payload", () => {
++  const result = validateSubmitAnswers([
++    { questionId: "q1", optionId: "a" },
++    { questionId: "q2", optionId: "b" },
++  ]);
++  assert.equal(result.ok, true);
++});
+diff --git a/backend/src/server.js b/backend/src/server.js
+index dd70175..efd080d 100644
+--- a/backend/src/server.js
++++ b/backend/src/server.js
+@@ -1,6 +1,8 @@
+ import cors from "cors";
+ import express from "express";
++import { sendApiError } from "./apiErrors.js";
+ import { getQuizForClient, gradeQuiz } from "./quizService.js";
++import { validateSubmitAnswers } from "./quizSubmitValidation.js";
+ 
+ const app = express();
+ const PORT = process.env.PORT ?? 4000;
+@@ -18,34 +20,26 @@ app.get("/api/quiz", (_req, res) => {
+ 
+ app.post("/api/quiz/submit", (req, res) => {
+   const { answers } = req.body ?? {};
++  const validation = validateSubmitAnswers(answers);
+ 
+-  if (!Array.isArray(answers)) {
+-    res.status(400).json({ error: "Se esperaba un arreglo 'answers'." });
++  if (!validation.ok) {
++    sendApiError(res, 400, validation.code, validation.message);
+     return;
+   }
+ 
+-  if (answers.length === 0) {
+-    res.status(400).json({ error: "The answers array cannot be empty." });
+-    return;
+-  }
++  res.json(gradeQuiz(answers));
++});
+ 
+-  const invalid = answers.some(
+-    (a) => !a || typeof a.questionId !== "string" || typeof a.optionId !== "string"
+-  );
+-  if (invalid) {
+-    res.status(400).json({
+-      error: "Cada respuesta debe tener questionId y optionId (string).",
+-    });
+-    return;
+-  }
++app.use((_req, res) => {
++  sendApiError(res, 404, "NOT_FOUND", "Route not found.");
++});
+ 
+-  const questionIds = answers.map((a) => a.questionId);
+-  if (new Set(questionIds).size !== questionIds.length) {
+-    res.status(400).json({ error: "Duplicate questionId values are not allowed." });
++app.use((err, req, res, next) => {
++  if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
++    sendApiError(res, 400, "INVALID_JSON", "Request body must be valid JSON.");
+     return;
+   }
+-
+-  res.json(gradeQuiz(answers));
++  next(err);
+ });
+ 
+ app.listen(PORT, () => {
+diff --git a/frontend/src/api.js b/frontend/src/api.js
+index 100e53e..c2d47b4 100644
+--- a/frontend/src/api.js
++++ b/frontend/src/api.js
+@@ -1,7 +1,18 @@
++function readErrorMessage(body, fallback) {
++  if (body?.error && typeof body.error === "object" && body.error.message) {
++    return body.error.message;
++  }
++  if (typeof body?.error === "string") {
++    return body.error;
++  }
++  return fallback;
++}
++
+ export async function fetchQuiz() {
+   const res = await fetch("/api/quiz");
+   if (!res.ok) {
+-    throw new Error("No se pudo cargar el quiz.");
++    const body = await res.json().catch(() => ({}));
++    throw new Error(readErrorMessage(body, "Could not load the quiz."));
+   }
+   return res.json();
+ }
+@@ -14,7 +25,7 @@ export async function submitQuiz(answers) {
+   });
+   if (!res.ok) {
+     const body = await res.json().catch(() => ({}));
+-    throw new Error(body.error ?? "Error al enviar respuestas.");
++    throw new Error(readErrorMessage(body, "Could not submit answers."));
+   }
+   return res.json();
+ }
+diff --git a/prompts/acceptance.md b/prompts/acceptance.md
+new file mode 100644
+index 0000000..e157231
+--- /dev/null
++++ b/prompts/acceptance.md
+@@ -0,0 +1,19 @@
++# Acceptance criteria — API errors feature
++
++All items are machine-verifiable without human judgment.
++
++| ID | Criterion | How to verify |
++|----|-----------|---------------|
++| AC-1 | Backend tests pass | `cd backend && npm test` → exit code `0` |
++| AC-2 | Error JSON shape | Tests in `backend/src/apiErrors.test.js` assert `{ error: { code, message } }` |
++| AC-3 | Submit validation codes | `backend/src/quizSubmitValidation.test.js` covers non-array, empty, bad shape, duplicate ids, valid payload |
++| AC-4 | No new dependencies | `backend/package.json` dependencies unchanged (only `cors`, `express`) |
++| AC-5 | No Spanish strings in backend validation | `grep -r "Se esperaba\\|Cada respuesta" backend/src` → exit code `1` (no matches) |
++| AC-6 | Frontend reads nested errors | `frontend/src/api.js` contains `body.error.message` (or equivalent) in error parsing |
++
++Optional manual check (not required for AC table):
++
++```bash
++curl -s -X POST http://localhost:4000/api/quiz/submit -H 'Content-Type: application/json' -d '{}'
++# expect error.code ANSWERS_NOT_ARRAY
++```
+diff --git a/prompts/agent-summary.md b/prompts/agent-summary.md
+new file mode 100644
+index 0000000..33df741
+--- /dev/null
++++ b/prompts/agent-summary.md
+@@ -0,0 +1,44 @@
++# Agent run summary — iteration 1 (+ redirect)
++
++## Initial Agent output (after refined prompt)
++
++The Agent created:
++
++- `backend/src/apiErrors.js` with `sendApiError` / `apiErrorBody`
++- `backend/src/quizSubmitValidation.js` with `validateSubmitAnswers` and `SubmitErrorCodes`
++- Refactored `backend/src/server.js` to call the validator
++- Tests for validation and error body shape
++- Partial update to `frontend/src/api.js`
++
++**Problem in the first diff (reason for redirect):**
++
++1. Error payload used a **flat** shape `{ "error": "string", "code": "ANSWERS_NOT_ARRAY" }` instead of nesting `code` under `error`.
++2. Two validation messages were still **Spanish** strings copied from the old handler.
++3. `frontend/src/api.js` still assumed `body.error` was a string, so nested errors would show a generic fallback in the UI.
++
++## Redirect prompt (specific correction)
++
++> In `backend/src/server.js` and `apiErrors.js`, every error response must use `{ error: { code, message } }` only — remove top-level `code`. Replace remaining Spanish validation messages with English. Update `frontend/src/api.js` `readErrorMessage` to prefer `body.error.message` but keep string fallback for backwards compatibility. Re-run backend tests.
++
++## After redirect
++
++- All submit validation errors use nested `error.code` / `error.message` in English.
++- Added 404 `NOT_FOUND` and JSON parse handler `INVALID_JSON`.
++- Frontend displays server message via `readErrorMessage`.
++- `npm test` in `backend/` passes (7 tests).
++
++## Iteration 2?
++
++Not required — one redirect fixed the shape/i18n/frontend parsing issues.
++
++## Files touched (final)
++
++| File | Change |
++|------|--------|
++| `backend/src/apiErrors.js` | new |
++| `backend/src/apiErrors.test.js` | new |
++| `backend/src/quizSubmitValidation.js` | new |
++| `backend/src/quizSubmitValidation.test.js` | new |
++| `backend/src/server.js` | validator + handlers |
++| `backend/package.json` | `"test"` script |
++| `frontend/src/api.js` | nested error parsing |
+diff --git a/prompts/iteration-1.md b/prompts/iteration-1.md
+new file mode 100644
+index 0000000..642d5da
+--- /dev/null
++++ b/prompts/iteration-1.md
+@@ -0,0 +1,48 @@
++# Iteration 1 — vague seed → structured Agent prompt
++
++## Seed prompt (vague)
++
++> Make the API errors better.
++
++---
++
++## Acceptance criteria
++
++See `prompts/acceptance.md` (machine-verifiable checklist for this iteration).
++
++---
++
++## Refined prompt (Prompt Shape)
++
++### Context
++
++- Repository: **cursor-app**, a small Node (Express) + React quiz app used for a Cursor course.
++- Backend entry: `backend/src/server.js`. Quiz grading lives in `backend/src/quizService.js`.
++- `POST /api/quiz/submit` currently returns ad hoc JSON errors (mixed Spanish/English strings, no stable `code` field).
++- Frontend `frontend/src/api.js` reads `body.error` as a plain string when submit fails.
++- Stack: ESM (`"type": "module"`), no TypeScript, no test runner beyond Node’s built-in `node:test` (already used in `frontend/src/utils/bestScoreStorage.test.js`).
++
++### Task
++
++Improve API error responses for the backend (focus on submit validation and common HTTP failures):
++
++1. Introduce a small helper (e.g. `backend/src/apiErrors.js`) that sends a **consistent JSON shape** for errors.
++2. Extract submit-body validation into a testable module (e.g. `backend/src/quizSubmitValidation.js`) and use it from `server.js`.
++3. Return **English** `message` strings and stable **machine-readable `code`** values for each validation failure on `POST /api/quiz/submit`.
++4. Add a 404 handler for unknown routes and handle invalid JSON bodies with a clear 400 response.
++5. Update `frontend/src/api.js` so the UI shows the nested error message when submit/load fails.
++
++### Constraints
++
++- **No new npm dependencies** (use Express + `node:test` only).
++- Keep existing successful response shapes unchanged (`GET /api/quiz`, graded submit payload).
++- Follow existing file layout: modules under `backend/src/`, tests colocated as `*.test.js`.
++- Use ESM `import`/`export`; match naming style of `quizService.js`.
++- Do not refactor unrelated frontend UI copy unless required for error display.
++
++### Verification
++
++- `cd backend && npm test` exits 0 (include tests for validation + error body shape).
++- Every `400` from submit validation returns JSON matching `{ "error": { "code": string, "message": string } }`.
++- Manual or scripted check: `POST /api/quiz/submit` with `{}` returns code `ANSWERS_NOT_ARRAY` (or equivalent documented in tests).
++- `grep -r "Se esperaba" backend/src` returns no matches (no leftover Spanish validation strings in backend src).

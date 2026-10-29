@@ -25,7 +25,7 @@ Cloud Agent / Cursor Agents
 ---------------------------
 Run ID: PASTE_FROM_CURSOR_AGENTS_UI
 Started (UTC): PASTE_TIMESTAMP
-Repository: PASTE_GITHUB_HTTPS_URL
+Repository: https://github.com/julian21olarte/cursor-quiz-app
 Branch: cursor-agent/readme-quick-reference
 
 Screenshot: attach exercise-12-cloud-agent-run-id.png (Agents panel showing Run ID)
@@ -37,7 +37,7 @@ Command run by agent or human before PR:
   ./scripts/verify-gate.sh
 
 Output file committed or pasted in PR: autonomous/verification-output.txt
-Exit code: PASTE_0_OR_1
+Exit code: 0
 
 Gate blocking example (required evidence of real gate):
   On a throwaway commit, break one test → ./scripts/verify-gate.sh → Exit code: 1 →
@@ -50,16 +50,16 @@ Gate blocking example (required evidence of real gate):
 
 Pull request
 ------------
-PR number: PASTE_PR_NUMBER
-PR URL: PASTE_GITHUB_PR_URL
-PR body includes full verification output: YES / NO
+PR number: 1
+PR URL: https://github.com/julian21olarte/cursor-quiz-app/pull/1
+PR body includes full verification output: YES
 
 GitHub Actions
 --------------
 Workflow: test-all
 Job: test
-Run URL on PR branch: PASTE_GITHUB_ACTIONS_RUN_URL
-Status: PASTE_success_or_failure
+Run URL on PR branch: https://github.com/julian21olarte/cursor-quiz-app/actions/runs/40897970456
+Status: pending (check Actions)
 
 Branch protection (main)
 ------------------------

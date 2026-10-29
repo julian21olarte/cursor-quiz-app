@@ -1,0 +1,19 @@
+Exercise 12 RESUBMISSION — Ship a Cloud Agent with Verification Gates
+Repository: cursor-app (GitHub remote required)
+Submitted by: Julian Olarte
+
+What changed vs first submission (52/100 feedback):
+  - Removed simulated run ID and fake "local merge"
+  - Human baseline on main: rollback + CI + verify-gate script (NOT agent scope)
+  - Agent task narrowed to README.md quick reference table only
+  - run-log.txt uses real Run ID / PR URL / Actions URL (fill after live run)
+  - Reflection shortened to 4 sentences with stale-base, cost, runaway scope risks
+  - Branch protection + CI status check "test" documented with screenshot slots
+  - Verification gate failure example included (block PR on exit 1)
+
+Required attachments (you must add after live run):
+  - exercise-12-cloud-agent-run-id.png
+  - exercise-12-branch-protection.png
+  - autonomous/verification-output.txt (from ./scripts/verify-gate.sh)
+
+Zip for LMS: exercise-12-cloud-agent-gates-REVISION.zip

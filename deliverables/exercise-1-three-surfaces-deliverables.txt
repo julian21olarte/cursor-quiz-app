@@ -12,39 +12,25 @@ Zip both together: e.g. exercise-1-deliverables.zip containing this .txt and
 indexing-screenshot.png (or .jpg).
 
 ================================================================================
-DELIVERABLE 1 — INDEXING / SEARCH READINESS (IMAGE FILE, NOT IN THIS TXT)
+DELIVERABLE 1 — INDEXING / SEARCH READINESS (IMAGE IN ZIP)
 ================================================================================
-File to include in zip: indexing-screenshot.png (or .jpg)
+File submitted: indexing-screenshot.png (bundled in exercise-1-three-surfaces.zip)
 
-Note (Cursor 3.14+): The old semantic index UI (percentage bar, "Reindex" command,
-"View included files") was removed. Agent search now uses local Instant Grep plus
-file reads. There is often NO percentage to capture — that is expected, not a
-misconfiguration.
+Screenshot contents (Cursor Settings → Indexing):
+- Codebase section visible: .cursorignore controls, team repository control.
+- "Index Repositories for Instant Grep" is ON (green): local indexing for faster
+  Agent grep searches; data stored locally per Cursor’s description.
+- Ignore Files section: hierarchical cursor ignore and symlink options shown.
 
-Recommended screenshot (pick one that your Cursor version shows):
+Context for reviewers (Cursor 3.x):
+The course text references a legacy semantic index progress bar (100%) and a
+"Reindex" command. Those UI elements are not present in current Cursor builds.
+This screenshot is the supported equivalent: Instant Grep indexing enabled before
+Task C (Agent). The cursor-app workspace is a local git repo (main branch, initial
+commit); no remote was configured for this exercise.
 
-Option A — Cursor Settings (best match for this course):
-1. Open folder: cursor-app
-2. Cmd + Shift + P → "Cursor Settings" (or Cursor menu → Settings)
-3. In the settings search box, type: indexing
-4. Open section "Indexing & Docs"
-5. Capture the panel showing toggles such as "Index Repositories for Instant Grep"
-   (and .cursorignore-related options if visible). Include the window title or
-   sidebar so the reviewer sees this is Cursor Settings for cursor-app.
-
-Option B — Proof Agent can search the repo (if Option A is minimal):
-1. Cmd + I → Agent
-2. Ask: "Use grep to find gradeQuiz in this repo and cite the file path."
-3. Screenshot the Agent reply citing backend/src/quizService.js (or similar).
-
-Caption to paste in zip README or below the image in your LMS if allowed:
-"Cursor 3.x: legacy codebase indexing progress UI removed; Instant Grep enabled
-for this git repo. Screenshot shows Indexing & Docs settings (and/or successful
-Agent grep over cursor-app) before Task C."
-
-Prerequisite for Instant Grep index (local, under .git/cursor/):
-- This project must be a git repository with at least one commit of source files.
-- Without git, Cursor falls back to plain ripgrep and may not show index controls.
+Confirmation before Task C: Index Repositories for Instant Grep enabled; cursor-app
+opened as workspace; Agent task completed after this settings check.
 
 ================================================================================
 DELIVERABLE 2 — TASK A: CURSOR TAB

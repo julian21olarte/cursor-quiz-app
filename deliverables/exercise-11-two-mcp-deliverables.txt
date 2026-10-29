@@ -1,0 +1,17 @@
+Exercise: Two MCP Servers, One Agent Task
+Repository: cursor-app
+Submitted by: Julian Olarte
+Date: 2026-10-23
+
+Zip contents:
+  exercise-11-mcp-config-for-submission.json  — both servers; secrets redacted
+  ../.cursor/mcp.example.json                   — committed filesystem template (in zip as mcp.example.json)
+  exercise-11-agent-transcript.md               — dual-server Agent task
+  exercise-11-mcp-log-line.txt                  — log evidence
+  exercise-11-mcp-screenshot-instructions.txt   — screenshot deliverable (image optional)
+  exercise-11-two-mcp-deliverables.txt          — this index
+
+Setup doc in repo: .cursor/MCP-SETUP.md
+
+Marketplace: Context7 (docs)
+Manual mcp.json: filesystem → copy from mcp.example.json

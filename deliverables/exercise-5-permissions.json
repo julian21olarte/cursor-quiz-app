@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "autoRunMode": "Run in Sandbox",
+  "allow": [
+    "npm run test --prefix backend",
+    "npm run test --prefix frontend",
+    "npm run test:all",
+    "git status",
+    "git diff",
+    "git diff --stat",
+    "git log -1 --oneline"
+  ]
+}

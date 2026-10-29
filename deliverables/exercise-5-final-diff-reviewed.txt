@@ -1,0 +1,87 @@
+Review notes (line-by-line) — exercise 5
+Commit: 506d2e1
+
+backend/src/quizService.test.js
+  + import getQuizMeta — OK: tests the public API used by /api/quiz/meta.
+  + assert questionCount === 5 — OK but brittle if quiz.json changes; acceptable for course fixture.
+  + REVIEW: Agent initially also asserted exact Spanish title string; PUSHBACK removed title equality (keep type/length only) to avoid locale churn.
+
+README.md
+  + /api/quiz/meta row — OK, matches server route.
+  + error shape note — OK, points to apiErrors.js.
+  + npm run test:all — OK, matches root package.json.
+
+package.json
+  + test:all script — OK, chains backend + frontend tests; no new deps.
+
+backend/src/server.js (Agent attempt — NOT in final commit)
+  REVIEW/PUSHBACK: Rejected proposed console.log in GET /api/quiz/meta handler; final tree unchanged.
+
+================================================================================
+git diff (final committed changes)
+================================================================================
+commit 506d2e106d06ac654abc0a72552096812dbc0762
+Author: Julian Olarte <julianolarte@MacBook-Air-de-Julian.local>
+Date:   Thu Oct 22 17:17:20 2026 -0500
+
+    test: cover getQuizMeta and add test:all script
+    
+    Add quizService test, document /api/quiz/meta, root test:all for course
+    approval workflow verification.
+    
+    Co-authored-by: Cursor <cursoragent@cursor.com>
+
+diff --git a/README.md b/README.md
+index 07f33bc..ec0acab 100644
+--- a/README.md
++++ b/README.md
+@@ -37,8 +37,17 @@ El proxy de Vite reenvía `/api/*` al backend, así el frontend no necesita CORS
+ |--------|------|-------------|
+ | GET | `/api/health` | Estado del servicio |
+ | GET | `/api/quiz` | Preguntas (sin respuestas correctas) |
++| GET | `/api/quiz/meta` | `{ id, title, questionCount }` (sin preguntas) |
+ | POST | `/api/quiz/submit` | Body: `{ "answers": [{ "questionId", "optionId" }] }` |
+ 
++Errores HTTP usan `{ "error": { "code", "message" } }` (ver `backend/src/apiErrors.js`).
++
++## Tests
++
++```bash
++npm run test:all
++```
++
+ ## Ideas de ejercicios para el curso
+ 
+ 1. Agregar una sexta pregunta en `backend/data/quiz.json`.
+diff --git a/backend/src/quizService.test.js b/backend/src/quizService.test.js
+new file mode 100644
+index 0000000..7b954c1
+--- /dev/null
++++ b/backend/src/quizService.test.js
+@@ -0,0 +1,12 @@
++import test from "node:test";
++import assert from "node:assert/strict";
++import { getQuizMeta } from "./quizService.js";
++
++test("getQuizMeta exposes id and questionCount from quiz.json", () => {
++  const meta = getQuizMeta();
++  assert.equal(typeof meta.id, "string");
++  assert.ok(meta.id.length > 0);
++  assert.equal(typeof meta.title, "string");
++  assert.ok(meta.questionCount >= 1);
++  assert.equal(meta.questionCount, 5);
++});
+diff --git a/package.json b/package.json
+index dd37a52..c657929 100644
+--- a/package.json
++++ b/package.json
+@@ -7,7 +7,8 @@
+     "install:all": "npm install && npm install --prefix backend && npm install --prefix frontend",
+     "dev": "concurrently -n api,web -c blue,green \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
+     "dev:backend": "npm run dev --prefix backend",
+-    "dev:frontend": "npm run dev --prefix frontend"
++    "dev:frontend": "npm run dev --prefix frontend",
++    "test:all": "npm run test --prefix backend && npm run test --prefix frontend"
+   },
+   "devDependencies": {
+     "concurrently": "^9.1.2"

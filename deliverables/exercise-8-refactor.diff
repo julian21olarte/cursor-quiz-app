@@ -1,0 +1,41 @@
+diff --git a/frontend/src/utils/bestScoreStorage.js b/frontend/src/utils/bestScoreStorage.js
+index 0aa2b71..c364735 100644
+--- a/frontend/src/utils/bestScoreStorage.js
++++ b/frontend/src/utils/bestScoreStorage.js
+@@ -1,19 +1,30 @@
+ const STORAGE_KEY = "cursor-quiz-best-scores";
+ 
++function isValidScore(value) {
++  return typeof value === "number" && !Number.isNaN(value);
++}
++
++function chooseHigherScore(previous, currentScore) {
++  return Math.max(previous, currentScore);
++}
++
+ export function pickBestScore(previous, currentScore) {
+-  if (typeof currentScore !== "number" || Number.isNaN(currentScore)) {
++  if (!isValidScore(currentScore)) {
+     return previous ?? null;
+   }
+   if (previous == null) return currentScore;
+-  return Math.max(previous, currentScore);
++  return chooseHigherScore(previous, currentScore);
++}
++
++function parseScoreMap(raw) {
++  if (!raw) return {};
++  const parsed = JSON.parse(raw);
++  return typeof parsed === "object" && parsed !== null ? parsed : {};
+ }
+ 
+ function readAll() {
+   try {
+-    const raw = localStorage.getItem(STORAGE_KEY);
+-    if (!raw) return {};
+-    const parsed = JSON.parse(raw);
+-    return typeof parsed === "object" && parsed !== null ? parsed : {};
++    return parseScoreMap(localStorage.getItem(STORAGE_KEY));
+   } catch {
+     return {};
+   }

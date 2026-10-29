@@ -1,0 +1,20 @@
+Exercise: Ship a Cloud Agent with Verification Gates
+Repository: cursor-app
+Submitted by: Julian Olarte
+Date: 2026-10-23
+
+Committed in repo:
+  AUTONOMOUS_ROLLBACK.md
+  CHANGELOG.md
+  autonomous/run-log.txt
+  README.md (verification gate note)
+
+Zip contents:
+  ../AUTONOMOUS_ROLLBACK.md          (copy)
+  ../autonomous/run-log.txt          (copy)
+  exercise-12-cloud-agent-reflection.md
+  exercise-12-automation-stretch.txt
+  exercise-12-cloud-agent-deliverables.txt
+
+Run ID (see run-log): cursor-cli-run-7f3a9c2e-docs-gate
+Branch: cursor-agent/changelog-readme-polish

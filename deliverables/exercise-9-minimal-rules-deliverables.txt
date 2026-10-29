@@ -1,0 +1,19 @@
+Exercise: Build a Minimal Rule Set and Prove It Changed Agent Behavior
+Repository: cursor-app
+Submitted by: Julian Olarte
+Date: 2026-10-23
+
+Zip contents:
+  exercise-9-project-rules-bundle.md   — both .mdc files with frontmatter
+  exercise-9-AGENTS-copy.md            — AGENTS.md copy
+  exercise-9-user-rule.txt             — User Rule text
+  exercise-9-layer-justifications.md   — one sentence per layer + activation notes
+  exercise-9-before-after-transcripts.md — same task, rules off vs on
+  exercise-9-minimal-rules-deliverables.txt — this index
+
+Repo paths:
+  .cursor/rules/api-errors.mdc
+  .cursor/rules/frontend-utils-tests.mdc
+  AGENTS.md
+
+Validation artifact in repo (after run): frontend/src/utils/formatPercentage.js + .test.js

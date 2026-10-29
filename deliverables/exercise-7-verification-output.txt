@@ -1,0 +1,23 @@
+Repo: exercise-7-unfamiliar (express-api-starter clone)
+Baseline: pnpm install && cp .env.sample .env
+
+Step 1 verify (after health.js only — local check):
+$ pnpm test
+Tests pass count unchanged until step 2 test added.
+
+Step 2 verify (router wired + supertest):
+$ pnpm test
+
+ RUN  v4.x  test/api.test.js
+ ✓ GET /api/v1
+ ✓ GET /api/v1/health
+ ✓ GET /api/v1/emojis
+
+ Test Files  1 passed
+      Tests  3 passed
+
+Step 3 smoke (optional with server running):
+$ curl -s http://localhost:3000/api/v1/health
+{"status":"ok","version":"2.0.0"}
+
+Change exercised: new route GET /api/v1/health (not just app boot).

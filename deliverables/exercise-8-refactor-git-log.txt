@@ -1,0 +1,2 @@
+a89095a refactor(frontend): extract parseScoreMap for localStorage reads
+0fca80b refactor(frontend): extract isValidScore helper in bestScoreStorage

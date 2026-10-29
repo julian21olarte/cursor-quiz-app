@@ -1,0 +1,26 @@
+Command: npm run test --prefix frontend
+(or: node --test src/utils/bestScoreStorage.test.js)
+
+Failing test: pickBestScore keeps higher score
+
+✖ pickBestScore keeps higher score
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 3
+  - 5
+  
+      at TestContext.<anonymous> (src/utils/bestScoreStorage.test.js:10:10)
+
+✖ pickBestScore keeps higher score
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 2
+  - 5
+  
+      at TestContext.<anonymous> (src/utils/bestScoreStorage.test.js:11:10)
+
+File: frontend/src/utils/bestScoreStorage.js (pickBestScore returned Math.min branch at commit 7ce5077)
+
+ℹ tests 3 | pass 1 | fail 2 (before fix)

@@ -1,0 +1,21 @@
+Exercise: Diagnose, Fix, and Refactor Around a Real Failing Test
+Repository: cursor-app
+Submitted by: Julian Olarte
+Date: 2026-10-23
+
+Commits:
+  7ce5077 intentional bug (Math.min)
+  f9d849e root-cause fix + regression test
+  0fca80b refactor pass 1 (isValidScore + chooseHigherScore)
+  a89095a refactor pass 2 (parseScoreMap)
+
+Zip contents:
+  exercise-8-failing-test-output.txt
+  exercise-8-root-cause-and-antipatterns.md
+  exercise-8-fix-and-regression.diff
+  exercise-8-refactor.diff
+  exercise-8-refactor-git-log.txt
+  exercise-8-rollback-note.md
+  exercise-8-debug-failing-test-deliverables.txt
+
+Module: frontend/src/utils/bestScoreStorage.js

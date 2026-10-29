@@ -1,0 +1,20 @@
+{
+  "_note": "Submitted configuration. Docs server installed via Marketplace (Context7). Filesystem block matches project .cursor/mcp.example.json. API key stored in Cursor MCP env UI only — not in this file.",
+  "mcpServers": {
+    "context7": {
+      "source": "Cursor MCP Marketplace",
+      "env": {
+        "CONTEXT7_API_KEY": "<redacted — set in Cursor Settings → MCP → Context7 → Environment>"
+      }
+    },
+    "filesystem": {
+      "source": "manual .cursor/mcp.json",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/Users/julianolarte/proyectos/cursor-app"
+      ]
+    }
+  }
+}

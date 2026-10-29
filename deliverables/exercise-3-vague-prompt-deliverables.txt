@@ -1,0 +1,22 @@
+Exercise: Refining a Vague Request into a Working Feature
+Repository: cursor-app
+Submitted by: Julian Olarte
+Date: 2026-10-22
+
+Zip contents map to course deliverables:
+  prompts/iteration-1.md     — seed + refined Context/Task/Constraints/Verification
+  prompts/acceptance.md      — machine-verifiable acceptance criteria
+  prompts/agent-summary.md   — Agent output, redirect, final state
+  prompts/final-diff.txt     — git diff for commit 92087fe (feature)
+
+Commit (local, not pushed): 92087fe — feat(api): structured error responses for quiz submit
+
+Seed prompt: "Make the API errors better."
+
+Verification (run locally):
+  cd backend && npm test
+  grep -r "Se esperaba" backend/src   # expect no matches
+
+================================================================================
+END
+================================================================================
