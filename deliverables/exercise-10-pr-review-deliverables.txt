@@ -1,0 +1,15 @@
+Exercise: Run a Cursor Authored PR Through a Full Review Cycle
+Repository: cursor-app (local PR, no remote push)
+Submitted by: Julian Olarte
+Date: 2026-10-23
+
+Branch: feat/score-format-ui → merged to main (local)
+Files in PR: 5 (App.jsx, formatPercentage.js, formatPercentage.test.js, README.md, AGENTS.md)
+
+Zip contents:
+  exercise-10-pr-final.diff
+  exercise-10-pr-description.md
+  exercise-10-human-review-notes.md
+  exercise-10-bugbot.md
+  exercise-10-pr-review-reflection.md
+  exercise-10-pr-review-deliverables.txt

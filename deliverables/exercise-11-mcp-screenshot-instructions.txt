@@ -1,0 +1,13 @@
+Deliverable: MCP settings screenshot (attach separately to zip if required)
+
+Capture:
+1. Cursor Settings → MCP (or Features → MCP)
+2. Both servers visible with GREEN / connected status:
+   - Context7 (or your Marketplace docs server)
+   - filesystem
+3. Include enough UI to show server names (no API key values visible)
+
+Suggested filename: exercise-11-mcp-servers-green.png
+
+If the platform accepts only zip/txt/md, embed a one-line caption in the transcript:
+"Screenshot: MCP panel 2026-10-23, Context7 + filesystem connected."

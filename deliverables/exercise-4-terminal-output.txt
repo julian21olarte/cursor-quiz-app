@@ -1,0 +1,16 @@
+Non-code attachment: terminal output after implementing quiz meta endpoint
+
+$ cd backend && npm test
+✔ apiErrorBody nests code and message (0.4ms)
+✔ apiErrorBody includes details when provided (0.1ms)
+✔ rejects non-array answers (0.2ms)
+✔ rejects empty array (0.1ms)
+✔ rejects invalid answer shape (0.1ms)
+✔ rejects duplicate question ids (0.1ms)
+✔ accepts valid payload (0.1ms)
+ℹ tests 7
+ℹ pass 7
+ℹ fail 0
+
+$ curl -s http://localhost:4000/api/quiz/meta
+{"id":"cursor-basics-01","title":"Introducción a Cursor","questionCount":5}

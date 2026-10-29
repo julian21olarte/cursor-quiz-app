@@ -1,0 +1,16 @@
+Exercise: Ship a Small Feature, Take a Wrong Turn, Recover with Checkpoints
+Repository: cursor-app
+Submitted by: Julian Olarte
+Date: 2026-10-22
+
+Pre-session commit: 39c6d3c
+Final commit: 6d5e3ca
+
+Zip contents:
+  exercise-6-checkpoint-writeup.md   — 150–300 word narrative (required)
+  exercise-6-git-log.txt             — git log floor → final
+  exercise-6-verification-output.txt — Agent shell test output
+  exercise-6-agent-session-notes.md  — checkpoint / sidepane notes
+  exercise-6-checkpoint-deliverables.txt — this index
+
+Session surface: Agent sidepane (Cmd+I), Restore Checkpoint used once.

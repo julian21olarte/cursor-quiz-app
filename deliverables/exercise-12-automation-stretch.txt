@@ -1,0 +1,14 @@
+Automation stretch goal — not enabled (optional deliverable)
+
+Planned trigger (if Cloud + GitHub available):
+  Event: schedule — weekly Monday 09:00 UTC
+  Action: Cursor Cloud Agent or GitHub Action running:
+    cursor agent --print "Run npm audit --omit=dev; update CHANGELOG Unreleased with summary; run npm run test:all; open PR if tests pass"
+  Guardrails: max 5 files; docs + CHANGELOG only; no npm install without approval
+
+Why deferred: local course repo without remote; branch protection not configured on GitHub.
+
+CLI fallback reference:
+  cron entry (manual): 0 9 * * 1 cd /path/to/cursor-app && cursor agent --force --output-format text "@AGENTS.md ..."
+
+Human in the loop: required reviewer on any opened PR; no auto-merge.

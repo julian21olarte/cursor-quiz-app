@@ -1,0 +1,15 @@
+Exercise: Land a Small Change in an Unfamiliar Repo
+Submitted by: Julian Olarte
+Date: 2026-10-23
+
+Unfamiliar repo: exercise-7-unfamiliar/ (clone of github.com/w3cj/express-api-starter)
+Change: GET /api/v1/health returns { status, version }.
+
+Zip contents:
+  unfamiliar-health-endpoint.md     — plan with ## Revision (copy of .cursor/plans/...)
+  exercise-7-ask-mode-transcript.md — 3 Ask Mode Q&A pairs
+  exercise-7-verification-output.txt — pnpm test + curl evidence
+  exercise-7-plan-wrong-note.md     — 2–3 sentence plan correction note
+  exercise-7-unfamiliar-land-deliverables.txt — this index
+
+Plan source path in workspace: .cursor/plans/unfamiliar-health-endpoint.md

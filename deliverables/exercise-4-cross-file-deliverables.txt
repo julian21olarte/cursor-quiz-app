@@ -1,0 +1,52 @@
+Exercise: Ship a Cross-File Feature Using Only Attachments and a Project Rule
+Repository: cursor-app
+Submitted by: Julian Olarte
+Date: 2026-10-22
+
+================================================================================
+1. PROJECT RULE — path and contents
+================================================================================
+See exercise-4-project-rule.md (full copy of .cursor/rules/api-errors.mdc).
+
+================================================================================
+2. IMPLEMENTATION PROMPT (@ attachments, no pasted code)
+================================================================================
+See exercise-4-implementation-prompt.md
+
+Attachments used:
+  @backend/src/server.js
+  @backend/src/quizService.js
+  @backend/src/apiErrors.js
+  @frontend/src/api.js
+  @frontend/src/App.jsx
+  @frontend/src/App.css
+  @.cursor/rules/api-errors.mdc
+  @deliverables/exercise-4-terminal-output.txt  (non-code: terminal output)
+
+================================================================================
+3. FILES EDITED (one line each)
+================================================================================
+.cursor/rules/api-errors.mdc     — New Project Rule: sendApiError + nested codes for backend routes.
+backend/src/quizService.js     — Added getQuizMeta() exporting id, title, questionCount.
+backend/src/server.js          — GET /api/quiz/meta plus QUIZ_LOAD_FAILED errors via sendApiError.
+frontend/src/api.js              — Added fetchQuizMeta() using existing readErrorMessage helper.
+frontend/src/App.jsx             — Parallel fetch of quiz + meta; header shows id and question count.
+frontend/src/App.css             — Styles for .quiz-meta line in hero.
+
+================================================================================
+4. HOW THE RULE INFLUENCED OUTPUT (one sentence)
+================================================================================
+The new /api/quiz/meta and wrapped GET /api/quiz routes use sendApiError with
+QUIZ_LOAD_FAILED instead of throwing plain strings, matching the nested
+{ error: { code, message } } shape mandated in .cursor/rules/api-errors.mdc.
+
+================================================================================
+5. NON-CODE ATTACHMENT (optional)
+================================================================================
+deliverables/exercise-4-terminal-output.txt — npm test + curl proof attached to Agent prompt.
+
+Local commit (not pushed): 70e1a74 — feat: quiz meta endpoint with project rule error shape
+
+================================================================================
+END
+================================================================================

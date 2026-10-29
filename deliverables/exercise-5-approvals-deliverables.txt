@@ -1,0 +1,19 @@
+Exercise: Configure Approvals and Validate Them on Real Work
+Repository: cursor-app
+Submitted by: Julian Olarte
+Date: 2026-10-22
+Commit: 506d2e1
+
+Zip file list:
+  exercise-5-permissions.json       — allowlist copy + auto-run mode note inside JSON
+  exercise-5-agent-prompt.md        — original Agent prompt + task summary
+  exercise-5-approvals-log.md       — first 5 approvals + denials
+  exercise-5-final-diff-reviewed.txt — git diff + line review notes
+  exercise-5-final-diff.txt         — raw git show patch
+  exercise-5-pushback.md            — pushback paragraph + verification
+  exercise-5-approvals-deliverables.txt — this index
+
+Auto-run mode: Run in Sandbox (NOT Run Everything)
+
+Note: Copy exercise-5-permissions.json entries into your real ~/.cursor/permissions.json
+if you want local settings to match this submission.

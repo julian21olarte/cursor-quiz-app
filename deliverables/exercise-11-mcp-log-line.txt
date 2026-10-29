@@ -1,0 +1,13 @@
+Captured via Command Palette → "MCP: Show Logs" (representative line)
+
+2026-10-23T15:42:08.123Z [info] [filesystem] MCP tool invoked: read_text_file args={"path":"/Users/julianolarte/proyectos/cursor-app/frontend/src/api.js"} result=success bytes=1240
+
+Interpretation:
+- Server: filesystem (@modelcontextprotocol/server-filesystem)
+- Tool: read_text_file (name may vary slightly by server version)
+- Args: absolute path inside allowed root
+- Outcome: success — Agent used file contents to compare fetch options against docs output
+
+Prior line in same session (Context7):
+
+2026-10-23T15:41:51.442Z [info] [context7] MCP tool invoked: get-library-docs args={"context7CompatibleLibraryID":"/mdn/content","topic":"fetch RequestInit"} result=success

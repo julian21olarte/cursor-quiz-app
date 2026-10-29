@@ -1,0 +1,11 @@
+39c6d3c chore: exercise 6 pre-session checkpoint floor
+6d5e3ca feat: enrich health endpoint and show API version in UI
+
+Full log (pre-session through final):
+
+commit 6d5e3ca feat: enrich health endpoint and show API version in UI
+  Add healthPayload helper with version and uptime, backend test coverage,
+  and parallel fetchHealth in the quiz header.
+
+commit 39c6d3c chore: exercise 6 pre-session checkpoint floor
+  Durable git baseline before Agent sidepane work (Restore Checkpoint exercise).

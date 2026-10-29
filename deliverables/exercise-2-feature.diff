@@ -1,0 +1,199 @@
+commit 82f0f401ce4c6bcf7e9d5902c7e7b3b1e06a672d
+Author: Julian Olarte <julianolarte@MacBook-Air-de-Julian.local>
+Date:   Thu Oct 22 16:55:45 2026 -0500
+
+    feat(frontend): persist personal best score in localStorage
+    
+    Add bestScoreStorage helper, show personal best in the quiz header,
+    disable submit until all questions are answered, and add node:test coverage
+    for score comparison logic.
+    
+    Co-authored-by: Cursor <cursoragent@cursor.com>
+
+diff --git a/frontend/package.json b/frontend/package.json
+index 4108d38..7f61cda 100644
+--- a/frontend/package.json
++++ b/frontend/package.json
+@@ -6,7 +6,8 @@
+   "scripts": {
+     "dev": "vite",
+     "build": "vite build",
+-    "preview": "vite preview"
++    "preview": "vite preview",
++    "test": "node --test src/utils/bestScoreStorage.test.js"
+   },
+   "dependencies": {
+     "react": "^19.0.0",
+diff --git a/frontend/src/App.css b/frontend/src/App.css
+index 51e9dea..0baf4f1 100644
+--- a/frontend/src/App.css
++++ b/frontend/src/App.css
+@@ -33,6 +33,12 @@
+   color: var(--muted);
+ }
+ 
++.best-score {
++  margin-top: 0.75rem !important;
++  font-size: 0.95rem;
++  color: var(--accent);
++}
++
+ .muted {
+   color: var(--muted);
+   text-align: center;
+diff --git a/frontend/src/App.jsx b/frontend/src/App.jsx
+index 0b82fb9..f197d35 100644
+--- a/frontend/src/App.jsx
++++ b/frontend/src/App.jsx
+@@ -1,11 +1,16 @@
+ import { useCallback, useEffect, useState } from "react";
+ import { fetchQuiz, submitQuiz } from "./api.js";
++import {
++  getBestScore,
++  saveBestScoreIfHigher,
++} from "./utils/bestScoreStorage.js";
+ import "./App.css";
+ 
+ function App() {
+   const [quiz, setQuiz] = useState(null);
+   const [selections, setSelections] = useState({});
+   const [result, setResult] = useState(null);
++  const [bestScore, setBestScore] = useState(null);
+   const [loading, setLoading] = useState(true);
+   const [submitting, setSubmitting] = useState(false);
+   const [error, setError] = useState(null);
+@@ -15,7 +20,10 @@ function App() {
+     (async () => {
+       try {
+         const data = await fetchQuiz();
+-        if (!cancelled) setQuiz(data);
++        if (!cancelled) {
++          setQuiz(data);
++          setBestScore(getBestScore(data.id));
++        }
+       } catch (e) {
+         if (!cancelled) setError(e.message);
+       } finally {
+@@ -52,6 +60,8 @@ function App() {
+     try {
+       const graded = await submitQuiz(answers);
+       setResult(graded);
++      const updatedBest = saveBestScoreIfHigher(quiz.id, graded.score);
++      setBestScore(updatedBest);
+     } catch (e) {
+       setError(e.message);
+     } finally {
+@@ -65,6 +75,9 @@ function App() {
+     setError(null);
+   };
+ 
++  const allAnswered =
++    quiz?.questions.every((q) => Boolean(selections[q.id])) ?? false;
++
+   if (loading) {
+     return (
+       <div className="layout">
+@@ -96,6 +109,11 @@ function App() {
+         <span className="badge">Curso Cursor</span>
+         <h1>{quiz.title}</h1>
+         <p>{quiz.description}</p>
++        {bestScore != null && (
++          <p className="best-score" data-testid="best-score">
++            Personal best: <strong>{bestScore}</strong> / {quiz.questions.length}
++          </p>
++        )}
+       </header>
+ 
+       {error && (
+@@ -152,7 +170,7 @@ function App() {
+ 
+         <footer className="actions">
+           {!result ? (
+-            <button type="submit" disabled={submitting}>
++            <button type="submit" disabled={submitting || !allAnswered}>
+               {submitting ? "Enviando…" : "Enviar respuestas"}
+             </button>
+           ) : (
+@@ -174,7 +192,7 @@ function App() {
+         <ul>
+           <li>Añadir una pregunta nueva en <code>backend/data/quiz.json</code></li>
+           <li>Mostrar un temporizador en el frontend</li>
+-          <li>Guardar el mejor puntaje en <code>localStorage</code></li>
++          <li>Mostrar historial de intentos (backend)</li>
+           <li>Crear un endpoint <code>GET /api/quiz/random</code></li>
+         </ul>
+       </aside>
+diff --git a/frontend/src/utils/bestScoreStorage.js b/frontend/src/utils/bestScoreStorage.js
+new file mode 100644
+index 0000000..0aa2b71
+--- /dev/null
++++ b/frontend/src/utils/bestScoreStorage.js
+@@ -0,0 +1,45 @@
++const STORAGE_KEY = "cursor-quiz-best-scores";
++
++export function pickBestScore(previous, currentScore) {
++  if (typeof currentScore !== "number" || Number.isNaN(currentScore)) {
++    return previous ?? null;
++  }
++  if (previous == null) return currentScore;
++  return Math.max(previous, currentScore);
++}
++
++function readAll() {
++  try {
++    const raw = localStorage.getItem(STORAGE_KEY);
++    if (!raw) return {};
++    const parsed = JSON.parse(raw);
++    return typeof parsed === "object" && parsed !== null ? parsed : {};
++  } catch {
++    return {};
++  }
++}
++
++function writeAll(map) {
++  try {
++    localStorage.setItem(STORAGE_KEY, JSON.stringify(map));
++  } catch {
++    /* quota / private mode — ignore */
++  }
++}
++
++export function getBestScore(quizId) {
++  if (!quizId) return null;
++  const value = readAll()[quizId];
++  return typeof value === "number" ? value : null;
++}
++
++export function saveBestScoreIfHigher(quizId, score) {
++  if (!quizId) return getBestScore(quizId);
++  const map = readAll();
++  const next = pickBestScore(map[quizId] ?? null, score);
++  if (next !== map[quizId]) {
++    map[quizId] = next;
++    writeAll(map);
++  }
++  return next;
++}
+diff --git a/frontend/src/utils/bestScoreStorage.test.js b/frontend/src/utils/bestScoreStorage.test.js
+new file mode 100644
+index 0000000..0bfd25e
+--- /dev/null
++++ b/frontend/src/utils/bestScoreStorage.test.js
+@@ -0,0 +1,17 @@
++import test from "node:test";
++import assert from "node:assert/strict";
++import { pickBestScore } from "./bestScoreStorage.js";
++
++test("pickBestScore returns current when no previous", () => {
++  assert.equal(pickBestScore(null, 4), 4);
++});
++
++test("pickBestScore keeps higher score", () => {
++  assert.equal(pickBestScore(5, 3), 5);
++  assert.equal(pickBestScore(2, 5), 5);
++});
++
++test("pickBestScore ignores invalid current", () => {
++  assert.equal(pickBestScore(3, NaN), 3);
++  assert.equal(pickBestScore(null, "x"), null);
++});

@@ -1,0 +1,3 @@
+# Reflection (3–5 sentences)
+
+Before leaving a Cloud Agent unattended for a week, I would require PR-only merges with the `test` status check and at least one human reviewer, because agents can push to stale base branches and create noisy revert chains. I would cap each run to one doc file (like README) so runaway loops cannot touch `backend/` or workflows. I would watch cost and queue time on Cloud Agents and stop cron triggers after one failed verification gate, since re-running without fixing tests burns minutes and hides the real defect. I already saw that a simulated run log is not auditable—only a real Run ID, CI URL, and pasted `verify-gate.sh` output belong in the submission.

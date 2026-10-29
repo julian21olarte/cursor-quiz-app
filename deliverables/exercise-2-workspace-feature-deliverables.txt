@@ -1,0 +1,82 @@
+Exercise: Configure Your Workspace and Ship a Small Feature
+Repository: cursor-app
+Submitted by: Julian Olarte
+Date: 2026-10-22
+
+================================================================================
+DELIVERABLE 1 — CURSOR SETTING NOTE (see exercise-2-cursor-setting-note.md)
+================================================================================
+
+Setting changed: Cursor Settings → Tab → Partial Accepts (enabled)
+
+Why: Multi-line Tab suggestions in React components often mixed useful state
+wiring with extra JSX. Partial accepts let me take only the lines I wanted while
+still using Tab for flow during the best-score feature.
+
+================================================================================
+DELIVERABLE 2 — COMMIT / DIFF (SHIPPED FEATURE)
+================================================================================
+
+Feature summary:
+- Persist personal best score per quiz id in localStorage
+- Display "Personal best: X / N" in quiz header after first scored attempt
+- Disable submit until every question has a selected option
+- Unit tests for pickBestScore (node:test)
+
+Commit (local main, not pushed):
+  82f0f401ce4c6bcf7e9d5902c7e7b3b1e06a672d
+
+Commit subject:
+  feat(frontend): persist personal best score in localStorage
+
+Files touched:
+  frontend/src/utils/bestScoreStorage.js       (new)
+  frontend/src/utils/bestScoreStorage.test.js  (new)
+  frontend/src/App.jsx
+  frontend/src/App.css
+  frontend/package.json
+
+Full patch included in zip as: exercise-2-feature.diff
+
+Verification commands:
+  cd frontend && npm test
+  cd .. && npm run dev
+  (Complete quiz twice in browser; confirm best score updates and submit stays
+  disabled until all radios are selected.)
+
+================================================================================
+DELIVERABLE 3 — REFLECTION (step → surface)
+================================================================================
+
+See exercise-2-reflection.md in this zip for full tables and Agent diff notes.
+
+Quick mapping:
+- Orient on submit flow / storage location → Ask Mode (Cmd+L, Shift+Tab)
+- bestScore state + useEffect hook-up → Cursor Tab (multi-line accept)
+- try/catch + pickBestScore in bestScoreStorage.js → Inline Edit (Cmd+K)
+- New util + App wiring + CSS + test script → Agent Mode (Cmd+I), diff reviewed
+- Setting before coding → Cursor Settings → Tab → Partial Accepts
+
+Wrong-surface correction: trivial single-file rename almost went to Agent;
+used Inline Edit instead.
+
+================================================================================
+DELIVERABLE 4 — ONE SENTENCE PER SURFACE
+================================================================================
+
+Ask Mode: I would reach for Ask again when I need cross-file orientation or
+architecture questions without risking unsolicited edits.
+
+Cursor Tab: I would reach for Tab again when I am mid-function and the next
+few lines are obvious from immediate context.
+
+Inline Edit: I would reach for Inline Edit again for scoped, single-file changes
+where I can describe the intent in one sentence and review a tight diff.
+
+Agent Mode: I would reach for Agent again when shipping a vertical slice that
+touches several files (module + UI + tests) and I have time to review the full
+patch.
+
+================================================================================
+END
+================================================================================
