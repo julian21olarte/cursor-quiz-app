@@ -13,13 +13,22 @@ zip "$ZIP" \
   ../AUTONOMOUS_ROLLBACK.md \
   ../autonomous/run-log.txt \
   ../autonomous/verification-output.txt \
-  ../autonomous/verification-output-FAIL-EXAMPLE.txt
+  ../autonomous/verification-output-FAIL-EXAMPLE.txt \
+  ../autonomous/local-agent-evidence.txt \
+  exercise-12-SOLO-CAPTURAS.md
 for png in exercise-12-cloud-agent-run-id.png exercise-12-branch-protection.png; do
   if [[ -f "$png" ]]; then
     zip "$ZIP" "$png"
   fi
 done
 echo "Wrote $ZIP"
-if grep -q PASTE_FROM_CURSOR_AGENTS_UI "$ROOT/autonomous/run-log.txt" 2>/dev/null; then
-  echo "WARN: run-log still missing Cloud Agent Run ID — add PNG + Run ID before LMS upload."
+missing=0
+for png in exercise-12-cloud-agent-run-id.png exercise-12-branch-protection.png; do
+  [[ -f "$DEL/$png" ]] || { echo "WARN: missing $png — see exercise-12-SOLO-CAPTURAS.md"; missing=1; }
+done
+if [[ "$missing" -eq 0 ]]; then
+  echo "OK: both screenshots present — ready for LMS upload."
+else
+  echo "Zip created; add screenshots and re-run to include them."
 fi
+exit 0

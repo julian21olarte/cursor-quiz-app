@@ -1,5 +1,5 @@
 Running verification gate: npm run test:all
-Started: 2026-10-29T15:12:20Z
+Started: 2026-10-29T15:25:55Z
 ---
 npm warn Unknown env config "devdir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
 
@@ -11,15 +11,15 @@ npm warn Unknown env config "devdir". This will stop working in the next major v
 > cursor-quiz-backend@1.0.0 test
 > node --test src/
 
-✔ apiErrorBody nests code and message (0.466792ms)
-✔ apiErrorBody includes details when provided (0.062ms)
-✔ getHealthPayload includes service, version, uptimeSeconds (0.335125ms)
-✔ getQuizMeta exposes id and questionCount from quiz.json (0.377834ms)
-✔ rejects non-array answers (0.3155ms)
-✔ rejects empty array (0.049166ms)
-✔ rejects invalid answer shape (0.717292ms)
-✔ rejects duplicate question ids (0.048584ms)
-✔ accepts valid payload (0.043667ms)
+✔ apiErrorBody nests code and message (0.889708ms)
+✔ apiErrorBody includes details when provided (0.082083ms)
+✔ getHealthPayload includes service, version, uptimeSeconds (0.683083ms)
+✔ getQuizMeta exposes id and questionCount from quiz.json (0.573959ms)
+✔ rejects non-array answers (0.311541ms)
+✔ rejects empty array (0.047542ms)
+✔ rejects invalid answer shape (0.367167ms)
+✔ rejects duplicate question ids (0.070083ms)
+✔ accepts valid payload (0.045875ms)
 ℹ tests 9
 ℹ suites 0
 ℹ pass 9
@@ -27,19 +27,19 @@ npm warn Unknown env config "devdir". This will stop working in the next major v
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 61.809875
+ℹ duration_ms 66.910625
 npm warn Unknown env config "devdir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
 
 > cursor-quiz-frontend@1.0.0 test
 > node --test src/utils/bestScoreStorage.test.js src/utils/formatPercentage.test.js
 
-✔ pickBestScore returns current when no previous (0.2825ms)
-✔ pickBestScore keeps higher score (0.050958ms)
-✔ pickBestScore ignores invalid current (0.034666ms)
-✔ regression: recorded best is not replaced by a lower score (0.073166ms)
-✔ formatPercentage formats score and rounded percent (0.26975ms)
-✔ formatPercentage handles zero total (0.045042ms)
-✔ formatPercentage rounds percent like backend gradeQuiz (0.035333ms)
+✔ pickBestScore returns current when no previous (0.266292ms)
+✔ pickBestScore keeps higher score (0.049958ms)
+✔ pickBestScore ignores invalid current (0.039875ms)
+✔ regression: recorded best is not replaced by a lower score (0.06575ms)
+✔ formatPercentage formats score and rounded percent (0.266833ms)
+✔ formatPercentage handles zero total (0.042958ms)
+✔ formatPercentage rounds percent like backend gradeQuiz (0.036ms)
 ℹ tests 7
 ℹ suites 0
 ℹ pass 7
@@ -47,7 +47,7 @@ npm warn Unknown env config "devdir". This will stop working in the next major v
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 51.872
+ℹ duration_ms 51.1855
 ---
 Exit code: 0
 PASS — gate open for PR

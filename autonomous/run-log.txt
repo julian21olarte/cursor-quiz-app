@@ -18,14 +18,17 @@ Agent task (low risk)
 Scope: README.md only — add "## Quick reference" table (see autonomous/CLOUD-AGENT-PROMPT.md).
 Agent must NOT create or rewrite AUTONOMOUS_ROLLBACK.md.
 
-Cloud Agent / Cursor Agents
----------------------------
-Run ID: PASTE_FROM_CURSOR_AGENTS_UI
+Agent execution
+---------------
+Mode: Cursor Agent Mode (local workspace — no Cloud Agents run ID)
+Agent commit: 42c1218cd9bf5dd96e5c66fd0cd48db9bcb4fc16
 Started (UTC): 2026-10-29T14:49:28Z
 Repository: https://github.com/julian21olarte/cursor-quiz-app
 Branch: cursor-agent/readme-quick-reference
+Evidence file: autonomous/local-agent-evidence.txt
 
-Screenshot: deliverables/exercise-12-cloud-agent-run-id.png (Agents panel showing Run ID)
+Screenshot: deliverables/exercise-12-cloud-agent-run-id.png
+  → PR #1 Files tab (README Quick reference) OR Cloud Agents Run ID if you run one later
 
 Verification gate (real command output)
 ---------------------------------------

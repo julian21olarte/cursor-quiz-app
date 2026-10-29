@@ -1,0 +1,24 @@
+Exercise 12 — Local Agent Mode evidence (no Cloud Agents run)
+=============================================================
+
+The README task ran in Cursor Agent Mode on the local clone before the GitHub remote existed.
+
+Agent-authored change:
+  Commit: 42c1218cd9bf5dd96e5c66fd0cd48db9bcb4fc16
+  Message: docs: add README quick reference table
+  Co-authored-by: Cursor <cursoragent@cursor.com>
+  Files: README.md only (+10 lines, Quick reference table)
+
+Integration:
+  Branch: cursor-agent/readme-quick-reference
+  PR: https://github.com/julian21olarte/cursor-quiz-app/pull/1
+  CI: https://github.com/julian21olarte/cursor-quiz-app/actions/runs/40898908053 (success)
+
+Human baseline on main (before agent README work):
+  AUTONOMOUS_ROLLBACK.md, .github/workflows/test-all.yml, scripts/verify-gate.sh
+
+Verification gate (local, before PR):
+  ./scripts/verify-gate.sh → see autonomous/verification-output.txt
+
+Course screenshot substitute when no Cloud Run ID:
+  PR Files tab showing README diff (see deliverables/exercise-12-SOLO-CAPTURAS.md)
