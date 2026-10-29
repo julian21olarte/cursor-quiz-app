@@ -2,7 +2,8 @@
 
 Todo lo demás ya está hecho: repo, PR #1, CI verde, branch protection (API), run-log, verify-gate, zip.
 
-El README con **Quick reference** se hizo en **Agent Mode local** (commit `42c1218`), no hubo run en Cloud Agents. El run-log documenta esa evidencia.
+Cloud Agent (web): https://cursor.com/agents/bc-b9630c20-5eab-4cb9-8dff-20907a24eab6  
+README en PR #1; run-log en `autonomous/run-log.txt`.
 
 ## Captura 1 — Branch protection
 

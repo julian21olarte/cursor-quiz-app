@@ -6,7 +6,8 @@ What changed vs first submission (52/100 feedback):
   - Removed simulated run ID and fake "local merge"
   - Human baseline on main: rollback + CI + verify-gate script (NOT agent scope)
   - Agent task narrowed to README.md quick reference table only
-  - run-log.txt uses real Run ID / PR URL / Actions URL (fill after live run)
+  - run-log.txt uses real Cloud Agent ID / PR URL / Actions URL
+  - Cloud Agent: bc-b9630c20-5eab-4cb9-8dff-20907a24eab6
   - Reflection shortened to 4 sentences with stale-base, cost, runaway scope risks
   - Branch protection + CI status check "test" documented with screenshot slots
   - Verification gate failure example included (block PR on exit 1)
