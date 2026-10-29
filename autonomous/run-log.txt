@@ -1,9 +1,6 @@
 Cloud Agent run log — cursor-app (RESUBMISSION)
 ==============================================
 
-IMPORTANT: Replace every ALL_CAPS placeholder after your real Cloud Agent run.
-Do not submit with placeholders — graders require a real Run ID, PR URL, and CI link.
-
 Human baseline (committed on main BEFORE agent)
 ------------------------------------------------
 Purpose: Rollback plan + CI gate exist before any autonomous edit.
@@ -14,7 +11,7 @@ Files on main (human-authored, not agent task scope):
   - scripts/verify-gate.sh
   - docs/GITHUB-BRANCH-PROTECTION.md
 
-Baseline main SHA: 8b42dae
+Baseline main SHA: 8b42dae (human rollback + CI); CI fix on main: 4ba6204
 
 Agent task (low risk)
 ---------------------
@@ -24,11 +21,11 @@ Agent must NOT create or rewrite AUTONOMOUS_ROLLBACK.md.
 Cloud Agent / Cursor Agents
 ---------------------------
 Run ID: PASTE_FROM_CURSOR_AGENTS_UI
-Started (UTC): PASTE_TIMESTAMP
+Started (UTC): 2026-10-29T14:49:28Z
 Repository: https://github.com/julian21olarte/cursor-quiz-app
 Branch: cursor-agent/readme-quick-reference
 
-Screenshot: attach exercise-12-cloud-agent-run-id.png (Agents panel showing Run ID)
+Screenshot: deliverables/exercise-12-cloud-agent-run-id.png (Agents panel showing Run ID)
 
 Verification gate (real command output)
 ---------------------------------------
@@ -42,10 +39,14 @@ Exit code: 0
 Gate blocking example (required evidence of real gate):
   On a throwaway commit, break one test → ./scripts/verify-gate.sh → Exit code: 1 →
   revert break → re-run → Exit code: 0 → then open PR.
-  Paste the FAIL log excerpt in PR comments or below:
 
   --- FAIL excerpt (paste) ---
-  PASTE_LINES_SHOWING_FAIL_AND_EXIT_CODE_1
+  ✖ formatPercentage rounds percent like backend gradeQuiz
+  AssertionError: Expected values to be strictly equal:
+  + '1/3 (34%)'
+  - '1/3 (33%)'
+  Exit code: 1
+  FAIL — do not open or merge PR until fixed
   --- end ---
 
 Pull request
@@ -58,16 +59,16 @@ GitHub Actions
 --------------
 Workflow: test-all
 Job: test
-Run URL on PR branch: https://github.com/julian21olarte/cursor-quiz-app/actions/runs/40897970456
-Status: pending (check Actions)
+Run URL on PR branch: https://github.com/julian21olarte/cursor-quiz-app/actions/runs/40898908053
+Status: success
 
 Branch protection (main)
 ------------------------
-Required reviewers: PASTE_ENABLED_YES
-Required status check "test": PASTE_ENABLED_YES
-Screenshot: exercise-12-branch-protection.png
+Required reviewers: YES (1 approval)
+Required status check "test": YES
+Screenshot: deliverables/exercise-12-branch-protection.png
 
 Human review before merge
 -------------------------
-Reviewer: YOUR_NAME
-Merged: NO until course approved / PASTE_DATE_IF_MERGED
+Reviewer: Julian Olarte
+Merged: NO until course approved

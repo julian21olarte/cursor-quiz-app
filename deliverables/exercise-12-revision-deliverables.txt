@@ -11,9 +11,14 @@ What changed vs first submission (52/100 feedback):
   - Branch protection + CI status check "test" documented with screenshot slots
   - Verification gate failure example included (block PR on exit 1)
 
-Required attachments (you must add after live run):
+Live links (verified 2026-10-29):
+  - Repo: https://github.com/julian21olarte/cursor-quiz-app
+  - PR #1: https://github.com/julian21olarte/cursor-quiz-app/pull/1
+  - CI (green): https://github.com/julian21olarte/cursor-quiz-app/actions/runs/40898908053
+  - Branch protection: enabled (test check + 1 approval) — see exercise-12-branch-protection-api-evidence.json
+
+Required attachments (student adds — see exercise-12-TU-PASOS-ES.md):
   - exercise-12-cloud-agent-run-id.png
   - exercise-12-branch-protection.png
-  - autonomous/verification-output.txt (from ./scripts/verify-gate.sh)
 
-Zip for LMS: exercise-12-cloud-agent-gates-REVISION.zip
+Zip for LMS: deliverables/exercise-12-cloud-agent-gates-REVISION.zip (run scripts/rebuild-exercise-12-zip.sh after PNGs)
